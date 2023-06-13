@@ -39,3 +39,6 @@ jobs:
       if: steps.changed-py-files.outputs.any_changed == 'true'
       run: |
         pytest -s -v ${{ steps.changed-py-files.outputs.all_changed_files }}
+    - name: Clear logs
+      run: |
+        rm -rf logs/*
