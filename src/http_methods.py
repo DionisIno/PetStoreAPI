@@ -1,6 +1,7 @@
 import allure
 import requests
 from src.logger import Logger
+from src.urls import BASE_URL
 
 
 class MyRequests:
