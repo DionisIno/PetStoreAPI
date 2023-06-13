@@ -33,6 +33,7 @@ class MyRequests:
             headers = {}
         if cookies is None:
             cookies = {}
+
         Logger.add_request(url, data, headers, cookies, method)
 
         if method == "GET":
