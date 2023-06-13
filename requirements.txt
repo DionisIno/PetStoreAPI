@@ -1,0 +1,6 @@
+flake8==6.0.0
+pytest==7.3.2
+allure-pytest==2.13.2
+allure-python-commons==2.13.2
+requests==2.31.0
+Faker==18.10.1
