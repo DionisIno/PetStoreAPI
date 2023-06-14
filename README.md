@@ -37,3 +37,13 @@ On the Petstore Swagger website, you can perform the following actions:
 3. Explore API documentation: The Petstore Swagger site provides documentation that describes the available endpoints, request parameters, expected responses, and other information to help you use the API correctly.
 
 4. Explore code examples: Petstore Swagger also provides code examples for various programming languages that will assist you in getting started with the Petstore API. The code examples demonstrate how to make requests to the API and handle the received data.
+
+
+## How to work with this repository:
+
+- Clone repository to your machine.
+
+- Navigate to the root folder of the project.
+- Create a virtual environment.
+- Run command **pip install -r requirements.txt**
+- After, execute **pytest -s -v** to run tests.
