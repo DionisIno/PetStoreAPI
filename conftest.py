@@ -24,7 +24,8 @@ def clear_logs_directory():
 
 
 @pytest.hookimpl(tryfirst=True)
-@allure.description("Pytest_sessionstart hook to call a function before starting a session")
-@allure.step("Calling a function to clear the contents of the logs folder before starting a session")
 def pytest_sessionstart(session):
+    """
+    Calling a function to clear the contents of the logs folder before starting a session
+    """
     clear_logs_directory()
