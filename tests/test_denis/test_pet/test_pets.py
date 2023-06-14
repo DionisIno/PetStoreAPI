@@ -1,6 +1,5 @@
 import allure
 import pytest
-
 from src.assertions import Assertions
 from src.http_methods import MyRequests
 from data.data_pet import get_pet_by_status
