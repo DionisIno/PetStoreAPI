@@ -20,3 +20,13 @@ class TestPet:
         """
         response = MyRequests.get(self.link.BY_STATUS, status)
         Assertions.assert_code_status(response, self.status_code.STATUS_CODE_200)
+
+    @allure.title("Find pets by status and make sure the response is json")
+    @pytest.mark.parametrize("status", get_pet_by_status)
+    def test_get_pet_by_status_has_json_response(self, status):
+        """
+        This test checks that the response came in json format
+        :param status: "available", "pending",  "sold"
+        """
+        response = MyRequests.get(self.link.BY_STATUS, status)
+        Assertions.assert_response_has_be_json(response)

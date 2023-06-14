@@ -10,7 +10,7 @@ class Assertions:
             f"Unexpected status code. Expected: {expected_status_code}. Actual: {actual_status_code}"
 
     @staticmethod
-    def assert_response_have_be_json(response: Response):
+    def assert_response_has_be_json(response: Response):
         assert 'application/json' in response.headers.get('Content-Type', ''), \
             "Error: Response is not in JSON format"
 
