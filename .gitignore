@@ -1,2 +1,15 @@
+# env
 /venv/
+.env
+env
+
+# logs
 /logs/
+
+# cache
+__pycache__
+*.pyc
+
+# other
+.idea/
+allure-report/
