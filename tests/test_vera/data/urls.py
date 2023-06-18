@@ -6,5 +6,5 @@ class PetUrls:
     PET = "https://petstore.swagger.io/v2/pet"
 
 class UserUrls:
-    USER = "/user/createWithArray"
-    GET_USER = "https://petstore.swagger.io/v2/user/"
+    CREATE_USER = "/user/createWithArray"
+    USER = "https://petstore.swagger.io/v2/user/"

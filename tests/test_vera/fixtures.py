@@ -10,7 +10,7 @@ def headers():
 
 
 @pytest.fixture
-def valid_pet_data():
+def pet_data_set():
     return {
         "id": 0,
         "category": {
@@ -32,7 +32,7 @@ def valid_pet_data():
 
 
 @pytest.fixture
-def user_data():
+def user_data_set():
     return [
             {
                 "id": 0,

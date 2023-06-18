@@ -9,9 +9,9 @@ from src.assertions import Assertions
 from src.http_methods import MyRequests
 from data.data_pet import get_pet_by_status
 from data.status_code import StatusCode
-from tests.test_vera.data.urls import PetUrls
+from data.urls import PetUrls, BASE_URL
 from tests.test_vera.data.data_pets import expected_pet_keys
-from tests.test_vera.fixtures import headers, valid_pet_data
+from tests.test_vera.fixtures import headers, pet_data_set
 
 
 class TestPet:
@@ -30,33 +30,23 @@ class TestPet:
         Assertions.assert_code_status(response, self.status_code.STATUS_CODE_200)
 
     @allure.title("Find pets by status > Expected number of pets for each status")
-    def test_pets_count_by_status(self):
+    @pytest.mark.parametrize("status", get_pet_by_status)
+    def test_pets_count_by_status(self, status):
         """
         The test checks if the response contains the expected number of pets for each status
         :param for status: "available", "pending",  "sold"
         """
-        for status in get_pet_by_status:
-            response = MyRequests.get(self.link.BY_STATUS, data=status)
-            data = response.json()
-            # print(data)
-            assert isinstance(data, list)
-            assert all(pet['status'] == status['status'] for pet in data)
-
-            # Assertions.assert_json_has_key(response, status['status'])
-            # pets_with_status = [pet for pet in data if pet['status'] == status['status']]
-            # assert len(pets_with_status) == len(
-            #     data), f"Response JSON doesn't have all pets with status '{status['status']}'"
-            # assert 'status' in response.json().keys(), f"response JSON doesn't have key 'status'"
-            # assert 'status' in response.json['status'], f"response JSON doesn't have key 'status'"
-            # Assertions.assert_json_value_by_name(response, 'status', status['status'],
-            #                                      f"Expected status to be '{status['status']}'")
+        response = MyRequests.get(self.link.BY_STATUS, data=status)
+        data = response.json()
+        assert isinstance(data, list)
+        assert all(pet['status'] == status['status'] for pet in data)
 
     @allure.title("Find pets by status > Response content type is JSON")
-    def test_response_content_type(self):
+    @pytest.mark.parametrize("status", get_pet_by_status)
+    def test_response_content_type(self, status):
         """ The test checks if the response content type is JSON """
-        for status in get_pet_by_status:
-            response = MyRequests.get(self.link.BY_STATUS, data=status)
-            Assertions.assert_response_has_be_json(response)
+        response = MyRequests.get(self.link.BY_STATUS, data=status)
+        Assertions.assert_response_has_be_json(response)
 
 
     @allure.title("Find pets by status > Response headers contain the necessary fields")
@@ -80,34 +70,25 @@ class TestCreatePet:
     link = PetUrls
 
     @allure.title("Create pet > Status code is 200")
-    def test_add_pet_to_store(self, headers, valid_pet_data):
-        url = "https://petstore.swagger.io/v2/pet"
-        # headers = {
-        #     "accept": "application/json",
-        #     "Content-Type": "application/json"
-        # }
-        # response = MyRequests.post(url, data=json_data, headers=headers)
-        response = requests.post(url, json=valid_pet_data, headers=headers)
-        print(response.status_code)
-        print(response.json())
+    def test_add_pet_to_store(self, headers, pet_data_set):
+        url = BASE_URL+self.link.PET
+        response = requests.post(url, json=pet_data_set, headers=headers)
         Assertions.assert_code_status(response, self.status_code.STATUS_CODE_200)
 
     @allure.title("Create pet > Response is in json format")
-    def test_add_pet_response_format(self, headers, valid_pet_data):
+    def test_add_pet_response_format(self, headers, pet_data_set):
         """ The test checks response is in json format for the created pet """
-        url = "https://petstore.swagger.io/v2/pet"
-        json_data = json.dumps(valid_pet_data) # Serialize the data dictionary to JSON
+        url = BASE_URL+self.link.PET
+        json_data = json.dumps(pet_data_set) # Serialize the data dictionary to JSON
         # response = MyRequests.post(url, data=json_data, headers=headers)
         response = requests.post(url, data=json_data, headers=headers)
-
         Assertions.assert_response_has_be_json(response)
-        print("Response is in JSON format")
 
     @allure.title("Create pet > Expected pet 'id' in response")
-    def test_add_pet_id_in_response(self, headers, valid_pet_data):
+    def test_add_pet_id_in_response(self, headers, pet_data_set):
         """ The test checks "id" in json response for the created pet """
-        url = "https://petstore.swagger.io/v2/pet"
-        json_data = json.dumps(valid_pet_data)  # Serialize the data dictionary to JSON
+        url = BASE_URL+self.link.PET
+        json_data = json.dumps(pet_data_set)  # Serialize the data dictionary to JSON
         # response = MyRequests.post(url, data=json_data, headers=headers)
         response = requests.post(url, data=json_data, headers=headers)
         try:
@@ -121,10 +102,10 @@ class TestCreatePet:
             assert False, "Failed to decode response JSON"
 
     @allure.title("Create pet > Expected pet keys in response")
-    def test_add_pet_keys_in_response(self, headers, valid_pet_data):
+    def test_add_pet_keys_in_response(self, headers, pet_data_set):
         """ The test checks "id" in json response for the created pet """
-        url = "https://petstore.swagger.io/v2/pet"
-        json_data = json.dumps(valid_pet_data)  # Serialize the data dictionary to JSON
+        url = BASE_URL+self.link.PET
+        json_data = json.dumps(pet_data_set)  # Serialize the data dictionary to JSON
         # response = MyRequests.post(url, data=json_data, headers=headers)
         response = requests.post(url, data=json_data, headers=headers)
         Assertions.assert_response_has_be_json(response)
@@ -132,15 +113,38 @@ class TestCreatePet:
             assert key in response.json(), f"Missing key '{key}' in the JSON response"
 
     @allure.title("Create pet > Expected pet name in response")
-    def test_add_pet_name_in_response(self, headers, valid_pet_data):
-        """ The test checks pets name in json response for the created pet """
-        url = "https://petstore.swagger.io/v2/pet"
-        json_data = json.dumps(valid_pet_data)  # Serialize the data dictionary to JSON
-        # response = MyRequests.post(url, data=json_data, headers=headers)
-        response = requests.post(url, data=json_data, headers=headers)
+    def test_add_pet_name_in_response(self, headers, pet_data_set):
+        """ The test checks pet's name in json response for the created pet """
+        json_data = json.dumps(pet_data_set)  # Serialize the data dictionary to JSON
+        # response = MyRequests.post(BASE_URL+self.link.PET, data=json_data, headers=headers)
+        response = requests.post(BASE_URL+self.link.PET, data=json_data, headers=headers)
         Assertions.assert_response_has_be_json(response)
-
-        print(response.json())
-        Assertions.assert_json_value_by_name(response, "name", "doggie", "Unexpected pet name")
-        Assertions.assert_json_value_by_name(response, 'name', valid_pet_data['name'],
+        Assertions.assert_json_value_by_name(response, 'name', pet_data_set['name'],
                                              "Incorrect pet name in the response")
+
+class TestUpdatePet:
+    status_code = StatusCode()
+    link = PetUrls
+
+    @allure.title("Update pet > Status code is 200")
+    def test_update_pet_success(self, pet_data_set):
+        """
+        The test updates pet's information with valid data
+        and checks the status code of the response
+        """
+        pet_data_set["name"] = "new name"
+        response = requests.put(BASE_URL + self.link.PET, json=pet_data_set)
+        print(response.json())
+        Assertions.assert_code_status(response, self.status_code.STATUS_CODE_200)
+        Assertions.assert_json_value_by_name(response, "name", "new name", "Failed to update the pet's name")
+
+    @allure.title("Update pet > Name is updated")
+    def test_update_pet_success(self, pet_data_set):
+        """
+        Test updates the pet's name and checks if it is updated successfully.
+        """
+        pet_data_set["name"] = "new name"
+        response = requests.put(BASE_URL + self.link.PET, json=pet_data_set)
+        print(response.json())
+        Assertions.assert_code_status(response, self.status_code.STATUS_CODE_200)
+        Assertions.assert_json_value_by_name(response, "name", "new name", "Failed to update the pet's name")
