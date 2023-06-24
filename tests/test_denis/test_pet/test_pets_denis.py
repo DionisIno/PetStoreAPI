@@ -32,3 +32,4 @@ class TestPet:
         response = MyRequests.get(self.link.BY_STATUS, status)
         Assertions.assert_response_has_be_json(response)
 
+
