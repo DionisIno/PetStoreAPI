@@ -1,5 +1,6 @@
 import allure
 import pytest
+
 from src.assertions import Assertions
 from src.http_methods import MyRequests
 from data.data_pet import get_pet_by_status
@@ -30,3 +31,4 @@ class TestPet:
         """
         response = MyRequests.get(self.link.BY_STATUS, status)
         Assertions.assert_response_has_be_json(response)
+

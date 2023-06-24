@@ -27,7 +27,7 @@ class MyRequests:
 
     @staticmethod
     def _send(url: str, data: dict, headers: dict, cookies: dict, method: str):
-        url = f"""{BASE_URL}{url}"""
+        url = BASE_URL + url
 
         if headers is None:
             headers = {}
@@ -39,11 +39,11 @@ class MyRequests:
         if method == "GET":
             response = requests.get(url, params=data, headers=headers, cookies=cookies)
         elif method == "POST":
-            response = requests.post(url, data=data, headers=headers, cookies=cookies)
+            response = requests.post(url, json=data, headers=headers, cookies=cookies)
         elif method == "PUT":
-            response = requests.put(url, data=data, headers=headers, cookies=cookies)
+            response = requests.put(url, json=data, headers=headers, cookies=cookies)
         elif method == "DELETE":
-            response = requests.delete(url, data=data, headers=headers, cookies=cookies)
+            response = requests.delete(url, json=data, headers=headers, cookies=cookies)
         else:
             raise Exception(f"""Bad method '{method}' was received""")
 
