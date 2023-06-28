@@ -1,4 +1,5 @@
 import pytest
+import uuid
 
 
 @pytest.fixture
@@ -32,7 +33,7 @@ def pet_data_set():
 
 
 @pytest.fixture
-def user_data_set():
+def config_user_data():
     return [
             {
                 "id": 0,
