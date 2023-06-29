@@ -10,4 +10,5 @@ class PetUrls:
 
 
 class UserUrls:
-    CREATE_USER = "/user"
+    CREATE_USER = "/user/createWithArray"
+    USER = "/user/"
