@@ -100,7 +100,7 @@ class Assertions:
         """
         response_times_list = []
         for x in range(number_of_calls):
-            response = MyRequests.post(UserUrls.CREATE_USER, user_json)
+            response = MyRequests.post(UserUrls.USER, user_json)
             response_times_list.append(response.elapsed.total_seconds())
         average_time = sum(response_times_list)/len(response_times_list)
         assert average_time <= requirements_time, \
