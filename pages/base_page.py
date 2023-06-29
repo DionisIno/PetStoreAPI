@@ -22,7 +22,6 @@ class BasePage:
             file_data = json.load(file)
         return file_data
 
-
     def create_pet(self):
         data = {
           "id": 0,
