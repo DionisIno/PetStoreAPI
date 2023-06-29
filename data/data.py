@@ -8,3 +8,16 @@ class Pet:
     photoUrls: str = None
     status: str = None
     breed: str = None
+
+
+@dataclass
+class User:
+    id: int = None
+    username: str = None
+    firstName: str = None
+    lastName: str = None
+    email: str = None
+    password: str = None
+    phone: str = None
+    userStatus: int = None
+
