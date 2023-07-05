@@ -1,5 +1,4 @@
 import pytest
-import uuid
 
 
 @pytest.fixture
@@ -9,6 +8,12 @@ def headers():
             "Content-Type": "application/json"
         }
 
+@pytest.fixture
+def update_headers():
+    return {
+            "Accept": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded"
+        }
 
 @pytest.fixture
 def pet_data_set():
