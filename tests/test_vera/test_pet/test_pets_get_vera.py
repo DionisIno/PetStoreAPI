@@ -87,7 +87,7 @@ class TestPet:
         Assertions.assert_code_status(response, self.status_code.STATUS_CODE_200)
 
     @allure.title("Get a pet by non-existing ID > Status code is 404")
-    def test_get_pet_by_id(self, headers, pet_data_set):
+    def test_get_pet_by_id_status_code_404(self, headers, pet_data_set):
         """This test to get pet info by non-existing ID and ensures status code is 404"""
         pet_id = -1
         response = MyRequests.get(
@@ -97,7 +97,8 @@ class TestPet:
         Assertions.assert_code_status(response, self.status_code.STATUS_CODE_404)
 
     @allure.title("Get a pet by non-existing ID > Error message in the response")
-    def test_get_pet_by_id(self, headers, pet_data_set):
+    @pytest.mark.parametrize("name, expected_value, error_message", PET.expected_non_exist_pet_names_keys)
+    def test_get_pet_by_id_error_message(self, headers, pet_data_set, name, expected_value, error_message):
         """This test verifies the response for retrieving pet information by non-existing ID
         and validates error message in the response."""
         pet_id = -1
@@ -105,4 +106,5 @@ class TestPet:
             self.link.PET + f"/{pet_id}",
             headers=headers
         )
-        Assertions.assert_code_status(response, self.status_code.STATUS_CODE_404)
+        Assertions.assert_json_value_by_name(response, name, expected_value, error_message)
+

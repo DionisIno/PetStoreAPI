@@ -25,6 +25,11 @@ class ExpectedPetsResult:
         ("message", "not found", "Response JSON doesn't have key 'message'")
     ]
 
+    expected_non_exist_pet_names_keys = [
+        ("code", 1, "Response JSON doesn't have key 'code'"),
+        ("type", "error", "Response JSON doesn't have key 'type'"),
+        ("message", "Pet not found", "Response JSON doesn't have key 'message'")
+    ]
     get_pet_by_status_headers = ['access-control-allow-headers', 'access-control-allow-methods',
                                  'access-control-allow-origin',
                                  'content-type', 'content-type', 'date', 'server']
