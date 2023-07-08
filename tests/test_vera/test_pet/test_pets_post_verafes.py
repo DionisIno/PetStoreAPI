@@ -9,13 +9,14 @@ from tests.test_vera.conf import headers, update_headers, pet_data_set
 from tests.test_vera.data.data_pets import ExpectedPetsResult as PET
 
 
-@allure.epic('Testing POST Create method')
+@allure.epic('POST: Add a new pet to the store')
 class TestCreatePet:
     status_code = StatusCode()
     link = PetUrls
 
     @allure.title("Create pet > Status code is 200")
     def test_add_pet_to_store(self, headers, pet_data_set):
+        """The test checks status code is 200 for the created pet"""
         response = MyRequests.post(
             self.link.PET,
             pet_data_set,
@@ -66,8 +67,7 @@ class TestCreatePet:
         Assertions.assert_json_value_by_name(response, "id", actual_pet_id,
                                              "Incorrect pet id in the response")
 
-
-@allure.epic('Testing POST Update method')
+@allure.epic('POST: Update a pet in the store with form data')
 class TestUpdatePet:
     status_code = StatusCode()
     link = PetUrls
@@ -77,13 +77,13 @@ class TestUpdatePet:
         """This test case ensures status code is 200 for the successful update of a pet's information."""
         pet_data_set["name"] = PET.pet["pet_name"]
         pet_data_set["status"] = PET.pet["pet_id"]
-        '''creating a pet'''
+        #creating a pet
         response = MyRequests.post(
             self.link.PET,
             pet_data_set,
             headers=headers
         )
-        '''updating tge pet and checks the status code is 200'''
+        #updating tge pet and checks the status code is 200
         actual_pet_id = int(response.json()["id"])
         response = MyRequests.post(
             self.link.PET + f"/{actual_pet_id}",
@@ -106,14 +106,14 @@ class TestUpdatePet:
         pet_data_set["id"] = PET.pet["pet_id"]
         pet_data_set["name"] = PET.pet["pet_name"]
         pet_data_set["status"] = PET.pet["pet_status"]
-        '''creating pet'''
+        #creating pet
         response = MyRequests.post(
             self.link.PET,
             pet_data_set,
             headers=headers
         )
         actual_pet_id = int(response.json()["id"])
-        '''updating the pet and checking all keys'''
+        #updating the pet and checking all keys
         response = MyRequests.post(
             self.link.PET + f"/{actual_pet_id}",
             data=pet_data_set,
@@ -126,13 +126,13 @@ class TestUpdatePet:
         """This test case ensures status code is 404 for an invalid id in the update of a pet's information."""
         pet_data_set["name"] = PET.pet["pet_name"]
         pet_data_set["status"] = PET.pet["pet_status"]
-        '''creating a pet'''
+        #creating a pet
         MyRequests.post(
             self.link.PET,
             pet_data_set,
             headers=headers
         )
-        '''updating the pet with wrong id'''
+        #updating the pet with wrong id
         pet_id = -1
         response = MyRequests.post(
             self.link.PET + f"/{pet_id}",
@@ -160,18 +160,18 @@ class TestUpdatePet:
     @allure.title("Update pet with invalid method > Status code is 405")
     def test_update_pet_info_status_code_405(self, pet_data_set, headers, update_headers,):
         """ This test case ensures status code is 405 for updating a pet's info with invalid method."""
-        '''creating pet'''
+        #creating pet
         response = MyRequests.post(
             self.link.PET,
             pet_data_set,
             headers=headers
         )
-        get_pet_id = int(response.json()["id"])
-        '''updating pet with wrong method'''
+        actual_pet_id = int(response.json()["id"])
+        #updating pet with wrong method
         pet_data_set["name"] = PET.pet["pet_name"]
         pet_data_set["status"] = PET.pet["pet_status"]
         response = MyRequests.put(
-            self.link.PET + f"/{get_pet_id}",
+            self.link.PET + f"/{actual_pet_id}",
             data=pet_data_set,
             headers=update_headers)
         Assertions.assert_code_status(response, self.status_code.STATUS_CODE_405)
