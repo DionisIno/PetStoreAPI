@@ -1,5 +1,10 @@
 import random
+
 from generator.generator import generated_pet
+from data.pet_breed import get_breed
+from generator.generator import generated_pet
+from data.data_pet import get_pet_by_status
+
 
 class ExpectedPetsResult:
     expected_pet_keys = ['id', 'category', 'name', 'photoUrls', 'tags', 'status']
@@ -33,3 +38,29 @@ class ExpectedPetsResult:
     get_pet_by_status_headers = ['access-control-allow-headers', 'access-control-allow-methods',
                                  'access-control-allow-origin',
                                  'content-type', 'content-type', 'date', 'server']
+
+    random_status = random.choice(get_pet_by_status)["status"]
+
+    update_pet_info = {
+        "name": "doggie",
+        "photoUrls": [
+            get_breed(),
+            get_breed()
+        ],
+        "id": pet["pet_id"],
+        "category": {
+            "id": random.randint(1, 99999999),
+            "name": get_breed()
+        },
+        "tags": [
+            {
+                "id": random.randint(1, 999999),
+                "name": get_breed()
+            },
+            {
+                "id": random.randint(1, 99999999),
+                "name": get_breed()
+            }
+        ],
+        "status": random_status
+    }
